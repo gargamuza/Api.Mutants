@@ -8,8 +8,13 @@ using System.Threading.Tasks;
 
 namespace Api.Mutants.CustomRequestValidations
 {
-    public class DnaHaveValidLetters : ValidationAttribute
+    public class StringsInCollectionOnlyHaveValidLetters : ValidationAttribute
     {
+        private readonly string VALID_LETTERS;
+        public StringsInCollectionOnlyHaveValidLetters(string validLetters, string errorMessage) : base(errorMessage)
+        {
+            VALID_LETTERS = validLetters;
+        }
         public override bool IsValid(object value)
         {
             var list = value as IList;
@@ -22,7 +27,7 @@ namespace Api.Mutants.CustomRequestValidations
                 if (string.IsNullOrWhiteSpace(word))
                     return false;
 
-                var result = word.All(c => "ATCG".Contains(c));
+                var result = word.All(c => VALID_LETTERS.Contains(c));
                 if (!result)
                     return false;                  
             }

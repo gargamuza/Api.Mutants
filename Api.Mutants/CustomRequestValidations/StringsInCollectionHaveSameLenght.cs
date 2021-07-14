@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Api.Mutants.CustomRequestValidations
 {
-    public class DnaWordsHaveSameLenght : ValidationAttribute
+    public class StringsInCollectionHaveSameLenght : ValidationAttribute
     {    
         public override bool IsValid(object value)
         {
