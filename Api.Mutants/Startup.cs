@@ -33,6 +33,7 @@ namespace Api.Mutants
             services.AddControllers();
             services.AddDnaConfiguration();
             AddSwager(services);
+            services.AddBdContext();
         }
 
         private void AddSwager(IServiceCollection services)
