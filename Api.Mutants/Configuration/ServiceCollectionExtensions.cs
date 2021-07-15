@@ -30,7 +30,8 @@ namespace Api.Mutants.Configuration
         {
             IConfiguration configuration;
 
-            using (var serviceScope = services.BuildServiceProvider().CreateScope())
+            using (
+                var serviceScope = services.BuildServiceProvider().CreateScope())
             {
                 configuration = serviceScope.ServiceProvider.GetService<IConfiguration>();
             }

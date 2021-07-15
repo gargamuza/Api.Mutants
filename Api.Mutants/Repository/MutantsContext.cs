@@ -62,7 +62,7 @@ namespace Api.Mutants.Repository
             modelBuilder.ApplyConfigurationsFromAssembly(runningAssembly);
 
             //para las migraciones.
-            //no se ejecuta como un host, entonces GetEntryAssembly no es billetera.api o cualquier otro consumidor del core
+            //no se ejecuta como un host, entonces GetEntryAssembly no es api.mutants
             if (!string.IsNullOrWhiteSpace(_migrationOptions.EntitiesAssemblyName))
             {
                 if (runningAssembly.GetName().Name != _migrationOptions.EntitiesAssemblyName)
@@ -73,8 +73,6 @@ namespace Api.Mutants.Repository
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            //optionsBuilder.UseSqlServer(@"Server=.\SQLEXPRESS;Database=db_mutants;Trusted_Connection=True;");
-            //optionsBuilder.UseLazyLoadingProxies();
 
             var sqlServerExtension = optionsBuilder.Options.FindExtension<Microsoft.EntityFrameworkCore.SqlServer.Infrastructure.Internal.SqlServerOptionsExtension>();
 

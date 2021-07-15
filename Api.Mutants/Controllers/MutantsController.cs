@@ -1,4 +1,6 @@
-﻿using Api.Mutants.Models.Request;
+﻿using Api.Mutants.Models;
+using Api.Mutants.Models.Request;
+using Api.Mutants.Repository;
 using Api.Mutants.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -16,9 +18,11 @@ namespace Api.Mutants.Controllers
     public class MutantsController : ControllerBase
     {
         IMutantsService _mutantsService;
-        public MutantsController(IMutantsService mutantsService)
+        private readonly MutantsContext _mutantsContext;
+        public MutantsController(IMutantsService mutantsService, MutantsContext mutantsContext)
         {
             _mutantsService = mutantsService;
+            _mutantsContext = mutantsContext;
         }
 
         [HttpPost]
@@ -29,6 +33,14 @@ namespace Api.Mutants.Controllers
         public IActionResult IsMutant(MutantRequest adn)
         {
             var result = _mutantsService.IsMutant(adn.dna);
+
+            var stat = new Stat();
+            stat.IsMutant = result;
+            stat.RequestDate = DateTime.Now;
+            _mutantsContext.Attach(stat);
+            _mutantsContext.SaveChanges();
+
+
             if (result)
                 return Ok();
             else
