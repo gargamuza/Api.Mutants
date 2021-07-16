@@ -34,9 +34,8 @@ namespace Api.Mutants.Controllers
         {
             var result = _mutantsService.IsMutant(adn.dna);
 
-            var stat = new Stat();
-            stat.IsMutant = result;
-            stat.RequestDate = DateTime.Now;
+            var stat = (Stat)adn;
+            stat.IsMutant = result;           
             _mutantsContext.Attach(stat);
             _mutantsContext.SaveChanges();
 

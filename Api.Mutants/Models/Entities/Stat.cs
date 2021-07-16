@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Api.Mutants.Models.Request;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,17 @@ namespace Api.Mutants.Models
         public DateTime RequestDate { get; set; }
         public bool IsMutant { get; set; }
         public string Dna { get; set; }
+
+        public static explicit operator Stat(MutantRequest v)
+        {
+            if (v == null)
+                return null;
+
+            return new Stat { 
+                Dna = $"[ { string.Join(",", v.dna) } ]",
+                RequestDate = DateTime.Now,               
+            };
+        }
 
         public class StatMap : IEntityTypeConfiguration<Stat>
         {
