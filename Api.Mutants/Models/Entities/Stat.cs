@@ -12,6 +12,7 @@ namespace Api.Mutants.Models
         public int Id { get; set; }
         public DateTime RequestDate { get; set; }
         public bool IsMutant { get; set; }
+        public string Dna { get; set; }
 
         public class StatMap : IEntityTypeConfiguration<Stat>
         {
@@ -22,6 +23,7 @@ namespace Api.Mutants.Models
                 builder.Property(x => x.Id).HasColumnName("Id").ValueGeneratedOnAdd().IsRequired();
                 builder.Property(x => x.RequestDate).HasColumnName("RequestDate").HasColumnType("datetime");
                 builder.Property(s => s.IsMutant).HasColumnName("IsMutant").IsRequired();
+                builder.Property(s => s.Dna).HasColumnName("Dna");
             }
         }
 
