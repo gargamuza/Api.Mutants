@@ -2,9 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Api.Mutants.Models
 {
@@ -38,6 +35,5 @@ namespace Api.Mutants.Models
                 builder.Property(s => s.Dna).HasColumnName("Dna");
             }
         }
-
     }
 }
