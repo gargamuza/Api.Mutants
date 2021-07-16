@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Api.Mutants.Models;
+using Api.Mutants.Repository;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,6 +10,13 @@ namespace Api.Mutants.Services
 {
     public class MutantsService : IMutantsService
     {
+
+        private readonly IServiceScopeFactory _serviceFactory;
+        public MutantsService(IServiceScopeFactory serviceFactory)
+        {           
+            _serviceFactory = serviceFactory;
+        }
+
         public string[,] ConvertToMultiArray(string[] adn)
         {
             string[,] adnMatrix = new string[adn.Length, adn.Max(s => s.Length)];
@@ -91,9 +101,17 @@ namespace Api.Mutants.Services
             return false;
         }
 
-        public bool IsValidAdn(string[] adn)
+        public  void SaveStat(Stat stat)
         {
-            throw new NotImplementedException();
+            Task.Run(() =>
+            {
+                using (var scope = _serviceFactory.CreateScope())
+                {                   
+                    var mutantsContext = scope.ServiceProvider.GetService<MutantsContext>();
+                    mutantsContext.Attach(stat);
+                    mutantsContext.SaveChanges();
+                }
+            });
         }
     }
 }

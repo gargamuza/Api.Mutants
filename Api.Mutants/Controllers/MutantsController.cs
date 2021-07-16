@@ -32,13 +32,13 @@ namespace Api.Mutants.Controllers
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
         public IActionResult IsMutant(MutantRequest adn)
         {
-            var result = _mutantsService.IsMutant(adn.dna);
-
             var stat = (Stat)adn;
-            stat.IsMutant = result;           
-            _mutantsContext.Attach(stat);
-            _mutantsContext.SaveChanges();
+            var result = _mutantsService.IsMutant(adn.dna);
+            stat.IsMutant = result;
 
+            //_mutantsContext.Attach(stat);
+            //_mutantsContext.SaveChanges();
+            _mutantsService.SaveStat(stat);
 
             if (result)
                 return Ok();
