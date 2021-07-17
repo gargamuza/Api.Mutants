@@ -4,6 +4,11 @@ using Api.Mutants.Repository;
 using Api.Mutants.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Api.Mutants.Models.Responses;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,11 +19,9 @@ namespace Api.Mutants.Controllers
     public class MutantsController : ControllerBase
     {
         IMutantsService _mutantsService;
-        private readonly MutantsContext _mutantsContext;
-        public MutantsController(IMutantsService mutantsService, MutantsContext mutantsContext)
+        public MutantsController(IMutantsService mutantsService)
         {
             _mutantsService = mutantsService;
-            _mutantsContext = mutantsContext;
         }
 
         [HttpPost]
@@ -37,7 +40,17 @@ namespace Api.Mutants.Controllers
             if (result)
                 return Ok();
             else
-                return Forbid();
-        }      
+                return StatusCode(403);
+        }
+
+        [HttpGet]
+        [Route("/stats")]      
+        [ProducesResponseType(typeof(StatsResponse), (int)HttpStatusCode.OK)]     
+        public async Task<IActionResult> GetStats()
+        {
+            var stats = await _mutantsService.GetStats();
+
+            return Ok((StatsResponse)stats);
+        }
     }
 }

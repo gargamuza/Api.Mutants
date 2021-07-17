@@ -33,7 +33,7 @@ namespace Api.Mutants
             services.AddControllers();
             services.AddDnaConfiguration();
             AddSwager(services);
-            services.AddBdContext();
+            services.AddBdContext();           
         }
 
         private void AddSwager(IServiceCollection services)
@@ -80,7 +80,7 @@ namespace Api.Mutants
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-            });
+            });           
         }
     }
 }

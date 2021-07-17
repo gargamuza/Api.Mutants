@@ -1,4 +1,6 @@
-﻿using Api.Mutants.Repository;
+﻿
+using Api.Mutants.Converters;
+using Api.Mutants.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Api.Mutants.Configuration
 {

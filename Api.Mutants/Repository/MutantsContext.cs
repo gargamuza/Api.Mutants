@@ -12,7 +12,6 @@ namespace Api.Mutants.Repository
     {
         private MigrationOptions _migrationOptions;
         private ApplicationOptions _appOptions;
-        public DbSet<Stat> Stats { get; set; }
 
         public MutantsContext(DbContextOptions<MutantsContext> options) : base(options)
         {

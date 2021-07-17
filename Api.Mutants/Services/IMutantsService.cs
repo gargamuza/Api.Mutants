@@ -11,5 +11,6 @@ namespace Api.Mutants.Services
         public bool IsMutant(string[] adn);        
         public string[,] ConvertToMultiArray(string[] adn);
         public void SaveStat(Stat stat);
+        public Task<StatCalculation> GetStats();
     }
 }

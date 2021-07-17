@@ -1,5 +1,6 @@
 ﻿using Api.Mutants.Models;
 using Api.Mutants.Repository;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -10,10 +11,11 @@ namespace Api.Mutants.Services
 {
     public class MutantsService : IMutantsService
     {
-
+        private readonly MutantsContext _mutantsContext;
         private readonly IServiceScopeFactory _serviceFactory;
-        public MutantsService(IServiceScopeFactory serviceFactory)
-        {           
+        public MutantsService(MutantsContext mutantsContext, IServiceScopeFactory serviceFactory)
+        {
+            _mutantsContext = mutantsContext;
             _serviceFactory = serviceFactory;
         }
 
@@ -78,11 +80,11 @@ namespace Api.Mutants.Services
             }
 
             //Busqueda Diagonal
-            for (int i = 0; i < adn.GetLength(0) - 1; i++)
+            for (int i = 0; i < adnMatrix.GetLength(0) - 1; i++)
             {
                 int iOcurrencias = 0;
 
-                for (int j = 0; j < adn.GetLength(1) - 1; j++)
+                for (int j = 0; j < adnMatrix.GetLength(1) - 1; j++)
                 {
                     if (adnMatrix[i, j] == adnMatrix[++i, j + 1])
                         iOcurrencias++;
@@ -112,6 +114,20 @@ namespace Api.Mutants.Services
                     mutantsContext.SaveChanges();
                 }
             });
+        }
+
+        public async Task<StatCalculation> GetStats()
+        {
+            var statCalculation = new StatCalculation();
+
+            var stats = _mutantsContext.Set<Stat>().AsNoTracking();
+
+            statCalculation.CountMutantDna = await stats.Where(x => x.IsMutant).CountAsync();
+            statCalculation.CountPersonDna = await stats.Where(x => !x.IsMutant).CountAsync();
+            var total = statCalculation.CountMutantDna + statCalculation.CountPersonDna;
+            statCalculation.Ratio = total != 0 ? (double)statCalculation.CountMutantDna / (double)total : 0;
+
+            return statCalculation;               
         }
     }
 }
