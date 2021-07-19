@@ -7,20 +7,25 @@ using System.Text;
 namespace Api.Mutants.Testing
 {
     [TestClass]
-    class StringsInCollectionHaveMinimumLenghtTest
-    {
+    public class StringsInCollectionHaveMinimumLenghtTest
+    {      
+        [DataRow(new string[] { "ABCD", "ABC", "EFGB" }, 4, false)]
+        [DataRow(new string[] { "ABCD", "ABCD", "EFGB" }, 4, true)]
+        [DataRow(new string[] { "ABCDDD", "ABCDDD", "EFGBED" }, 5, true)]
+        [DataRow(new string[] { "ABCDDD" }, 5, false)]
+        [DataRow(new string[] { }, 5, false)]
+        [DataRow(null, 5, false)]
         [TestMethod]
-        public void TestIsValid_AtLeastOneElementIsLessThatMinimun()
+        public void IsValid_StringsInCollectionHaveValidMinimumLenght(string[] array, int minimumLenght, bool expected)
         {
             //Arrange
-            var stringsInCollectionHaveMinimumLenght = new StringsInCollectionHaveMinimumLenght(4, "");
-            var array = new string[] { "ABCD", "ABC", "EFGB" };
+            var stringsInCollectionHaveMinimumLenght = new StringsInCollectionHaveMinimumLenght(minimumLenght, "");         
 
             //Act
             var result = stringsInCollectionHaveMinimumLenght.IsValid(array);
 
-            //Fact
-            Assert.IsFalse(result);
+            //Fact         
+            Assert.AreEqual(result, expected);
         }
     }
 }

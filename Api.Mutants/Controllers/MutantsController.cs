@@ -19,9 +19,11 @@ namespace Api.Mutants.Controllers
     public class MutantsController : ControllerBase
     {
         IMutantsService _mutantsService;
-        public MutantsController(IMutantsService mutantsService)
+        IStatsService _statsService;
+        public MutantsController(IMutantsService mutantsService, IStatsService statsService)
         {
             _mutantsService = mutantsService;
+            _statsService = statsService;
         }
 
         [HttpPost]
@@ -34,8 +36,8 @@ namespace Api.Mutants.Controllers
             var stat = (Stat)adn;
             var result = _mutantsService.IsMutant(adn.dna);
             stat.IsMutant = result;
-           
-            _mutantsService.SaveStat(stat);
+
+            _statsService.SaveStat(stat);
 
             if (result)
                 return Ok();
@@ -48,7 +50,7 @@ namespace Api.Mutants.Controllers
         [ProducesResponseType(typeof(StatsResponse), (int)HttpStatusCode.OK)]     
         public async Task<IActionResult> GetStats()
         {
-            var stats = await _mutantsService.GetStats();
+            var stats = await _statsService.GetStats();
 
             return Ok((StatsResponse)stats);
         }

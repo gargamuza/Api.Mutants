@@ -18,7 +18,7 @@ namespace Api.Mutants.CustomRequestValidations
         public override bool IsValid(object value)
         {
             var list = value as IList;
-            if (list == null)
+            if (list == null || list.Count == 0)
                 return false;
                          
             foreach (var element in list)

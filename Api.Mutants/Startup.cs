@@ -29,7 +29,8 @@ namespace Api.Mutants
         public void ConfigureServices(IServiceCollection services)
         {          
             services.AddTransient<IMutantsService, MutantsService>();
-           
+            services.AddTransient<IStatsService, StatsService>();
+
             services.AddControllers();
             services.AddDnaConfiguration();
             AddSwager(services);

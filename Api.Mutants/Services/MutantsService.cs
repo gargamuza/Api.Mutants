@@ -11,13 +11,6 @@ namespace Api.Mutants.Services
 {
     public class MutantsService : IMutantsService
     {
-        private readonly MutantsContext _mutantsContext;
-        private readonly IServiceScopeFactory _serviceFactory;
-        public MutantsService(MutantsContext mutantsContext, IServiceScopeFactory serviceFactory)
-        {
-            _mutantsContext = mutantsContext;
-            _serviceFactory = serviceFactory;
-        }
 
         public string[,] ConvertToMultiArray(string[] adn)
         {
@@ -101,33 +94,6 @@ namespace Api.Mutants.Services
 
             Console.WriteLine("No Mutante");
             return false;
-        }
-
-        public  void SaveStat(Stat stat)
-        {
-            Task.Run(() =>
-            {
-                using (var scope = _serviceFactory.CreateScope())
-                {                   
-                    var mutantsContext = scope.ServiceProvider.GetService<MutantsContext>();
-                    mutantsContext.Attach(stat);
-                    mutantsContext.SaveChanges();
-                }
-            });
-        }
-
-        public async Task<StatCalculation> GetStats()
-        {
-            var statCalculation = new StatCalculation();
-
-            var stats = _mutantsContext.Set<Stat>().AsNoTracking();
-
-            statCalculation.CountMutantDna = await stats.Where(x => x.IsMutant).CountAsync();
-            statCalculation.CountPersonDna = await stats.Where(x => !x.IsMutant).CountAsync();
-            var total = statCalculation.CountMutantDna + statCalculation.CountPersonDna;
-            statCalculation.Ratio = total != 0 ? (double)statCalculation.CountMutantDna / (double)total : 0;
-
-            return statCalculation;               
-        }
+        }      
     }
 }

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Api.Mutants.Services
 {
-    public interface IMutantsService
+    public interface IStatsService
     {
-        public bool IsMutant(string[] adn);        
-        public string[,] ConvertToMultiArray(string[] adn);
+        public void SaveStat(Stat stat);
+        public Task<StatCalculation> GetStats();
     }
 }
