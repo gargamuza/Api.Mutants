@@ -7,7 +7,8 @@ namespace Api.Mutants.Configuration
 {
     public class DnaOptions
     {
-        public int Ocurrences { get; set; }
+        public int MutantOcurrences { get; set; }
+        public string MutantPattern { get; set; }
         public static string Section = "Application:DnaConfiguration";
 
     }

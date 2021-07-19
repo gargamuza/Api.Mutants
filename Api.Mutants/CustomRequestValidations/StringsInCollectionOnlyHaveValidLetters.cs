@@ -15,6 +15,7 @@ namespace Api.Mutants.CustomRequestValidations
         {
             VALID_LETTERS = validLetters;
         }
+
         public override bool IsValid(object value)
         {
             var list = value as IList;

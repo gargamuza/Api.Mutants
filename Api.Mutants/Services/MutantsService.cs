@@ -1,4 +1,5 @@
-﻿using Api.Mutants.Models;
+﻿using Api.Mutants.Configuration;
+using Api.Mutants.Models;
 using Api.Mutants.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +12,11 @@ namespace Api.Mutants.Services
 {
     public class MutantsService : IMutantsService
     {
+        DnaOptions _dnaOptions;
+        public MutantsService(DnaOptions dnaOptions)
+        {
+            _dnaOptions = dnaOptions;
+        }
 
         public string[,] ConvertToMultiArray(string[] adn)
         {
@@ -32,6 +38,7 @@ namespace Api.Mutants.Services
             var adnMatrix = ConvertToMultiArray(adn);
 
             //Busqueda Horizontal
+            Console.WriteLine("Busqueda Horizontal");
             for (int i = 0; i < adnMatrix.GetLength(0) - 1; i++)
             {
                 int iOcurrencias = 0;
@@ -43,16 +50,18 @@ namespace Api.Mutants.Services
                     else
                         iOcurrencias = 0;
 
-                    if (iOcurrencias == 3)
+                    Console.WriteLine($"Comparando coordenada {i},{j} con {i},{j + 1} ");
+
+                    if (iOcurrencias == _dnaOptions.MutantOcurrences-1)
                     {
                         Console.WriteLine("Mutante");
                         return true;
                     }
-
                 }
             }
 
             //Busqueda Vertical
+            Console.WriteLine("Busqueda Vertical");
             for (int j = 0; j < adnMatrix.GetLength(1) - 1; j++)
             {
                 int iOcurrencias = 0;
@@ -64,7 +73,9 @@ namespace Api.Mutants.Services
                     else
                         iOcurrencias = 0;
 
-                    if (iOcurrencias == 3)
+                    Console.WriteLine($"Comparando coordenada {i},{j} con {i + 1},{j} ");
+
+                    if (iOcurrencias == _dnaOptions.MutantOcurrences - 1)
                     {
                         Console.WriteLine("Mutante");
                         return true;
@@ -72,25 +83,57 @@ namespace Api.Mutants.Services
                 }
             }
 
-            //Busqueda Diagonal
-            for (int i = 0; i < adnMatrix.GetLength(0) - 1; i++)
+            Console.WriteLine("Busqueda Diagonal 1");
+            //for (int jx = 0; jx < adnMatrix.GetLength(1) - _dnaOptions.MutantOcurrences; jx++)
             {
-                int iOcurrencias = 0;
-
-                for (int j = 0; j < adnMatrix.GetLength(1) - 1; j++)
+                //Busqueda Diagonal 1
+                
+                for (int i = 0; i < adnMatrix.GetLength(0) - 1; i++)
                 {
-                    if (adnMatrix[i, j] == adnMatrix[++i, j + 1])
-                        iOcurrencias++;
-                    else
-                        iOcurrencias = 0;
+                    int iOcurrencias = 0;
+                    var tempI = i;
 
-                    if (iOcurrencias == 3)
+                    for (int j = 0; j < adnMatrix.GetLength(1) - 1  - i; j++)
                     {
-                        Console.WriteLine("Mutante");
-                        return true;
+
+                        if (adnMatrix[tempI, j] == adnMatrix[++tempI, j + 1])
+                            iOcurrencias++;
+                        else
+                            iOcurrencias = 0;
+
+                        Console.WriteLine($"Comparando coordenada {tempI - 1 },{j } con {tempI},{j+1} ");
+
+                        if (iOcurrencias == _dnaOptions.MutantOcurrences - 1)
+                        {
+                            Console.WriteLine("Mutante");
+                            return true;
+                        }
                     }
                 }
             }
+
+            ////Busqueda Diagonal 2
+            //Console.WriteLine("Busqueda Diagonal 2");
+            //for (int i = adnMatrix.GetLength(0) - 1; i > 0; i--)
+            //{
+            //    int iOcurrencias = 0;
+
+            //    for (int j = 0; j < adnMatrix.GetLength(1) - 1; j++)
+            //    {
+            //        if (adnMatrix[i, j] == adnMatrix[--i, j + 1])
+            //            iOcurrencias++;
+            //        else
+            //            iOcurrencias = 0;
+
+            //        Console.WriteLine($"Comparando coordenada {i + 1},{j} con {i},{j + 1} ");
+
+            //        if (iOcurrencias == _dnaOptions.MutantOcurrences - 1)
+            //        {
+            //            Console.WriteLine("Mutante");
+            //            return true;
+            //        }
+            //    }
+            //}
 
             Console.WriteLine("No Mutante");
             return false;
