@@ -1,4 +1,5 @@
-﻿using Api.Mutants.Repository;
+﻿using Api.Mutants.Helpers;
+using Api.Mutants.Repository;
 using Api.Mutants.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -35,10 +36,10 @@ namespace Api.Mutants.Testing
         {
             //Arrange
             var mutantsService = new MutantsService(new Configuration.DnaOptions { MutantOcurrences = 4 });
-            var multiArray = mutantsService.ConvertToMultiArray(array);
+            var multiArray = ArraysHelper.ConvertToMultiArray(array);
 
             //Act
-            var result = mutantsService.AdnHorizontalSearch(multiArray);
+            var result = mutantsService.DnaHorizontalSearch(multiArray);
 
             //Fact         
             Assert.AreEqual(result, expected);
@@ -51,10 +52,10 @@ namespace Api.Mutants.Testing
         {
             //Arrange
             var mutantsService = new MutantsService(new Configuration.DnaOptions { MutantOcurrences = 4 });
-            var multiArray = mutantsService.ConvertToMultiArray(array);
+            var multiArray = ArraysHelper.ConvertToMultiArray(array);
 
             //Act
-            var result = mutantsService.AdnVerticalSearch(multiArray);
+            var result = mutantsService.DnaVerticalSearch(multiArray);
 
             //Fact         
             Assert.AreEqual(result, expected);
@@ -68,10 +69,10 @@ namespace Api.Mutants.Testing
         {
             //Arrange
             var mutantsService = new MutantsService(new Configuration.DnaOptions { MutantOcurrences = 4 });
-            var multiArray = mutantsService.ConvertToMultiArray(array);
+            var multiArray = ArraysHelper.ConvertToMultiArray(array);
 
             //Act
-            var result = mutantsService.AdnDiagonalSearch(multiArray);
+            var result = mutantsService.DnaDiagonalSearch(multiArray);
 
             //Fact         
             Assert.AreEqual(result, expected);

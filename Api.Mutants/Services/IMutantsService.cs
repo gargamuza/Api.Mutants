@@ -8,7 +8,10 @@ namespace Api.Mutants.Services
 {
     public interface IMutantsService
     {
-        public bool IsMutant(string[] adn);        
-        public string[,] ConvertToMultiArray(string[] adn);
+        public bool IsMutant(string[] adn);
+        public bool DnaDiagonalSearch(string[,] adn);
+        public bool DnaVerticalSearch(string[,] adn);
+        public bool DnaHorizontalSearch(string[,] adn);
+
     }
 }
