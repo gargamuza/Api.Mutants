@@ -12,7 +12,8 @@ namespace Api.Mutants.Testing
     public class MutantsServiceTest
     {
         [DataRow(new string[] { "ATGCGA", "CAGTGC", "TTATGT", "AGAAGG", "CCCCTA", "TCACTG"}, true)] //Horizontal, Vertical, Diagonal
-        [DataRow(new string[] { "ABCDEF", "GHIJKL", "LMNOPQ", "QRSTUV", "WXYZAB", "CDEFGH" }, false)]
+        [DataRow(new string[] { "TTGCGA", "CAGTGC", "TTATGT", "AGAAAG", "CCTCTA", "TCACTG" }, false)]
+        [DataRow(new string[] { "ATGCGA", "CAGTGC", "TTATGT", "AGAAGG", "CCCCTA", "TCACTG" }, true)] //Diagonal A
         [DataRow(new string[] { "ATGCGA", "CAGTGC", "TTGTGT", "AGAGTT", "CCGCGA", "TCACTG" }, true)] //Diagonal 1 G      
         [TestMethod]
         public void IsMutant_ValidateMutantDNA(string[] array, bool expected) 
@@ -22,6 +23,55 @@ namespace Api.Mutants.Testing
                                
             //Act
             var result = mutantsService.IsMutant(array);
+
+            //Fact         
+            Assert.AreEqual(result, expected);
+        }
+
+        [DataRow(new string[] { "TTGCGA","CAGTGC","TTATAT","AGAAGG","CCCCTA","TCACTG" }, true)]
+        [DataRow(new string[] { "ATGCGA", "CAGTGC", "TTATGT", "AGAAGG", "CCTCTA", "TCACTG" }, false)]
+        [TestMethod]
+        public void IsMutant_ValidateMutantHorizontalDNASearch(string[] array, bool expected)
+        {
+            //Arrange
+            var mutantsService = new MutantsService(new Configuration.DnaOptions { MutantOcurrences = 4 });
+            var multiArray = mutantsService.ConvertToMultiArray(array);
+
+            //Act
+            var result = mutantsService.AdnHorizontalSearch(multiArray);
+
+            //Fact         
+            Assert.AreEqual(result, expected);
+        }
+
+        [DataRow(new string[] { "TTGCGA", "CAGTGC", "TTATGT", "AGAAGG", "CCACTA", "TCACTG" }, true)] 
+        [DataRow(new string[] { "TTGCGA", "CAGTGC", "TTCTCT", "AGAAGG", "CCACTA", "TCACTG" }, false)]
+        [TestMethod]
+        public void IsMutant_ValidateMutantVerticalDNASearch(string[] array, bool expected)
+        {
+            //Arrange
+            var mutantsService = new MutantsService(new Configuration.DnaOptions { MutantOcurrences = 4 });
+            var multiArray = mutantsService.ConvertToMultiArray(array);
+
+            //Act
+            var result = mutantsService.AdnVerticalSearch(multiArray);
+
+            //Fact         
+            Assert.AreEqual(result, expected);
+        }
+
+        [DataRow(new string[] { "ATGCCA", "CAGTGC", "TTATGT", "AGAAGG", "TCCCTA", "TCACTG" }, true)] //Diagonal Inferior
+        [DataRow(new string[] { "TTGCCA", "CAGGGC", "TTATGT", "AGAAGG", "TCCCTA", "TCACTG" }, true)] // Diagonal Superior
+        [DataRow(new string[] { "TTGCGA", "CAGTGC", "TTCTCT", "AGAAGG", "CCACTA", "TCACTG" }, false)]
+        [TestMethod]
+        public void IsMutant_ValidateMutantDiagonalDNASearch(string[] array, bool expected)
+        {
+            //Arrange
+            var mutantsService = new MutantsService(new Configuration.DnaOptions { MutantOcurrences = 4 });
+            var multiArray = mutantsService.ConvertToMultiArray(array);
+
+            //Act
+            var result = mutantsService.AdnDiagonalSearch(multiArray);
 
             //Fact         
             Assert.AreEqual(result, expected);
