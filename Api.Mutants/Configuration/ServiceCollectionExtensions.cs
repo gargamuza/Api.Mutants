@@ -1,20 +1,15 @@
 ﻿
-using Api.Mutants.Converters;
 using Api.Mutants.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+using Microsoft.OpenApi.Models;
 
 namespace Api.Mutants.Configuration
 {
     public static class ServiceCollectionExtensions
     {
-
         public static void AddDnaConfiguration(this IServiceCollection services)
         {
             IConfiguration configuration;
@@ -44,6 +39,27 @@ namespace Api.Mutants.Configuration
 
             services.AddDbContext<MutantsContext>(options =>
                     options.UseSqlServer(applicationOptions.ConnectionString));
+        }
+
+        public static void AddSwagger(this IServiceCollection services)
+        {
+            services.AddSwaggerGen(options =>
+            {
+                var groupName = "v1";
+
+                options.SwaggerDoc(groupName, new OpenApiInfo
+                {
+                    Title = $"Mutants {groupName}",
+                    Version = groupName,
+                    Description = "Magneto API",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Magneto Mutants Company",
+                        Email = string.Empty,
+                        Url = new Uri("https://magnetomutantscompany.com/"),
+                    }
+                });
+            });
         }
     }
 }
