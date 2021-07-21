@@ -6,6 +6,7 @@ Instrucciones para la ejecucion de la API
 1- Desde swagger.
 
 Acceder a la url del swagger de la api: https://apimutants.azurewebsites.net/swagger/index.html
+
 Endpoints disponibles:
 -POST /mutant
 
